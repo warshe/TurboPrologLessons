@@ -1,0 +1,544 @@
+****************************************************************
+***      Айзикович А.А.,    МК   ИМИ,      апрель 1992.      ***
+***      Айзикович А.А.,   ПМИ ИжГТУ,    сентябрь 1994.      ***
+****************************************************************
+***                  Лабораторная работа N 3                 ***
+***                  "Списки,  арифметика.                   ***
+***              Управление перебором,  ввод и вывод"        ***
+****************************************************************
+
+                     5. Списки, арифметика
+
+5.1. Отработайте и проанализируйте следующие программы:
+
+    a) предикат умножения целых чисел (exmpl501.pro):
+
+PREDICATES
+
+  nondeterm times(integer,integer,integer)
+
+CLAUSES
+
+  /*  times(X,Y,Z) <-- Z=X*Y  */
+
+times(X,Y,Z):-
+  bound(X),bound(Y),free(Z),Z=X*Y.
+times(X,Y,Z):-
+  bound(X),bound(Z),free(Y),Y=Z div X.
+times(X,Y,Z):-
+  bound(Y),bound(Z),free(X),X=Z div Y.
+times(X,Y,Z):-
+  bound(X),bound(Y),bound(Z),Z=X*Y.
+
+    b) максимум двух целых чисел (exmpl502.pro):
+
+PREDICATES
+
+  maximum(integer,integer,integer)
+
+CLAUSES
+
+/*  maximum(X,X,Z) <--
+     Z - максимум целых чисел X, Y  */
+
+  maximum(X,Y,Y):-
+    X<=Y.
+  maximum(X,Y,X):-
+    X>Y.
+
+    c) минимум двух целых чисел (exmpl503.pro),
+
+PREDICATES
+
+  minimum(integer,integer,integer)
+
+CLAUSES
+
+/*  minimum(X,X,Z) <--
+     Z - минимум целых чисел X, Y  */
+
+  minimum(X,Y,Y):-
+    X>=Y.
+  minimum(X,Y,X):-
+    X<Y.
+
+    d) упорядоченный список (exmpl504.pro):
+
+DOMAINS
+
+  ilist=integer*
+
+PREDICATES
+
+  orderlist(ilist)
+
+CLAUSES
+
+/*  orderlist(X) <--
+      предикат упорядоченности списка X.  */
+
+  orderlist([X|[]]).
+  orderlist([X,Y|XYs]):-
+    X<=Y, orderlist(XYs).
+
+    e) сумма элементов списка (exmpl505.pro):
+
+DOMAINS
+
+  ilist=integer*
+
+PREDICATES
+
+  sumlist(ilist,integer)
+
+CLAUSES
+
+/*  sumlist(X,S) <--
+      S - сумма элементов непустого списка X.  */
+
+  sumlist([X|[]],X).
+  sumlist([X|Xs],Z):-
+    sumlist(Xs,Y),Z=X+Y.
+
+    f) наибольший общий делитель (exmpl506.pro):
+
+PREDICATES
+
+  gcd(integer,integer,integer)
+
+CLAUSES
+
+/*  gcd(X,Y,Z) <--
+      Z - наибольший общий делитель X и Y.  */
+
+  gcd(X,X,X).
+  gcd(X,Y,D):-
+    X<Y,Z=Y-X,gcd(Z,X,D).
+  gcd(X,Y,D):-
+    X>Y, gcd(Y,X,D).
+
+    g) отрезок целых чисел (exmpl507.pro):
+
+DOMAINS
+
+  ilist=integer*
+
+PREDICATES
+
+  between(integer,integer,ilist)
+
+CLAUSES
+
+/*   between(Left,Right,List) <--
+       List = [Left..Right]   */
+
+  between(N,N,[N]).
+  between(N,M,[N|Ts]):-
+    N<M,K=N+1,between(K,M,Ts).
+  between(N,M,_):-
+    N>M,fail.Goal: between(1,5,X)
+
+    h) предикат принадлежности подмножества множеству
+(exmpl508.pro)
+
+DOMAINS
+
+  slist = symbol*
+
+PREDICATES
+
+  subset(slist,slist)
+
+CLAUSES
+
+/*   subset(Subset,Set) <--
+       множество Subset - подмножество множества Set.  */
+
+    subset([],Set).
+    subset([X|Subset],[X|Set]):-
+      subset(Subset,Set).
+    subset([X|Subset],[Y|Set]):-
+      subset([X|Subset],Set).
+
+    i) подмножество чисел с заданной суммой (exmpl509.pro):
+
+DOMAINS
+
+  ilist=integer*
+
+PREDICATES
+
+  supsumma(ilist,integer,ilist)
+  belong(ilist,ilist)
+  sumlist(ilist,integer)
+
+CLAUSES
+
+/*  supsumma(Set,Summa,Supset) <--
+      Subset - подмножество множества Set,
+               а Summa - его сумма элементов  */
+
+  supsumma(Set,Summa,Supset):-
+    belong(Supset,Set),sumlist(Supset,Summa).
+
+/*  belong(Supset,Set) <--
+      Supset - подмножество множества Set  */
+
+  belong([],Set).
+  belong([X|Xs],[X|Sets]):-
+    belong(Xs,Sets).
+  belong([X|Xs],[Y|Sets]):-
+    belong([X|Xs],Sets).
+
+/*  sumlist(List,Summa) <--
+      Summa - сумма элементов непустого списка List.  */
+
+  sumlist([X|[]],X).
+  sumlist([X|Xs],Z):-
+    sumlist(Xs,Y),Z=X+Y.
+
+================================================================
+
+             6. Управление перебором,  ввод и вывод
+
+6.1. Ограничение перебора.
+   Проанализируйте работу следующих программ в среде турбо-
+   пролога:
+    a) Отсечение перебора (exmpl601.pro)
+
+PREDICATES
+  f1(integer,integer)
+  f2(integer,integer)
+  f3(integer,integer)
+  f4(integer,integer)
+
+CLAUSES
+  f1(X,0):-X<3.
+  f1(X,2):-3<=X,X<6.
+  f1(X,4):-6<=X.
+
+  f2(X,0):-X<3,!.
+  f2(X,2):-3<=X,X<6,!.
+  f2(X,4):-6<=X.
+
+  f3(X,0):-X<3,!.
+  f3(X,2):-X<6,!.
+  f3(X,4).
+
+  f4(X,0):-X<3.
+  f4(X,2):-X<6.
+  f4(X,4).
+
+Получите трассировки на цели
+  Goal: f1(1,Y),2<Y     Goal: f2(1,Y),2<Y
+  Goal: f2(7,Y)         Goal: f3(7,Y)
+  Goal: f4(1,Y)
+
+    b) Максимум двух целых чисел (exmpl602.pro)
+
+PREDICATES
+  maximum(integer,integer,integer)
+  maxcut(integer,integer,integer)
+
+CLAUSES
+  maximum(X,Y,X):-X>=Y.
+  maximum(X,Y,Y):-X<Y.
+
+  maxcut(X,Y,X):-X>=Y,!.
+  maxcut(X,Y,Y):-bound(X).
+
+Получите трассировки на цели
+Goal: maximum(2,5,Y) Goal: maximum(5,5,Y) Goal: maximum(8,5,Y)
+Goal: maxcut(2,5,Y)  Goal: maxcut(5,5,Y)  Goal: maxcut(8,5,Y)
+
+    c) Процедура принадлежности элемента списку,
+       дающая единственное решение (exmpl603.pro)
+
+DOMAINS
+  slist = symbol*
+
+PREDICATES
+  member(symbol,slist)
+  membercut(symbol,slist)
+
+CLAUSES
+  member(X,[X|_]).
+  member(X,[_|L]):-
+    member(X,L).
+
+  membercut(X,[X|_]):-!.
+  membercut(X,[_|L]):-
+    membercut(X,L).
+
+Отработайте цели Goal: member(X,[a,b,c])
+                 Goal: membercut(X,[a,b,c])
+
+    d) Добавление к списку без дублирования (exmpl604.pro)
+
+DOMAINS
+  slist = symbol*
+
+PREDICATES
+  add(symbol,slist,slist)
+  member(symbol,slist)
+
+CLAUSES
+  member(X,[X|_]):-!.
+  member(X,[_|L]):-member(X,L).
+
+  add(X,L,L):-member(X,L),!.
+  add(X,L,[X|L]).
+
+Получите трассировка на цели  Goal: add(a,[b,c],L)
+                              Goal: add(X,[b,c],L)
+                              Goal: add(a,[b,c,X],L)
+
+    e) Задача классификации объектов без использования
+       и с использованием отсечения (exmpl605.pro)
+
+PREDICATES
+  class(symbol,symbol)
+  classcut(symbol,symbol)
+  conquer(symbol,symbol)
+
+CLAUSES
+  conquer(tom,jon).       /* победитель - ann,pat,  */
+  conquer(ann,tom).       /* боец - tom,            */
+  conquer(pat,jim).       /* спортсмен - jon,jim.   */
+
+  class(X,private):-      /* боец */
+    conquer(X,_),         /* победить */
+    conquer(_,X).
+  class(X,winner):-       /* победитель */
+    conquer(X,_),
+    not(conquer(_,X)).
+  class(X,sportsman):-    /* спортсмен */
+    conquer(_,X),
+    not(conquer(X,_)).
+
+  classcut(X,private):-      /* боец */
+    conquer(X,_),            /* победить */
+    conquer(_,X),!.
+  classcut(X,winner):-       /* победитель */
+    conquer(X,_).
+  classcut(X,sportsman):-    /* спортсмен */
+    conquer(_,X).
+
+Отработайте цели
+Goal: class(P,C)  Goal: class(P,winner)   Goal: class(P,private)
+Goal: class(P,sportsman)  Goal: class(ann,C)  Goal: class(pat,C)
+Goal: class(tom,C)     Goal: class(jim,C)     Goal: class(jon,C)
+Goal: classcut(ann,C)        Goal: classcut(pat,C)
+Goal: classcut(X,winner)     Goal: classcut(tom,C)
+Goal: classcut(X,private)    Goal: classcut(jon,C)
+Goal: classcut(jim,C)        Goal: classcut(X,sportsman)
+Goal: classcut(Player,Category)
+
+6. 2. Отрицание как неуспех.
+   Проведите анализ следующих программ.
+    a) предикат "Различные объекты" (exmpl606.pro)
+
+PREDICATES
+  different(symbol,symbol)
+  different1(symbol,symbol)
+
+CLAUSES
+  different(X,X):-!,fail.
+  different(X,Y).
+
+  different1(X,Y):-
+    X=Y,!,fail;true.Goal: different(a,a)
+
+Отработайте цели   Goal: different(a,b)   Goal: different(a,b)
+
+    b) предикат отрицания (exmpl607.pro)
+
+PREDICATES
+  mynot(symbol)
+  mynot1(symbol)
+
+CLAUSES
+  mynot(P):-bound(P),!,fail;true.
+  mynot1(Q):-free(Q),!,fail;true.
+
+Отработайте цели   Goal: mynot(a)     Goal: mynot(X)
+                   Goal: mynot1(X)    Goal: mynot1(a)
+
+3. Трудности с отсечением и отрицанием.
+   Проанализируйте программы
+    a) моделирование отсечения (exmpl608.pro)
+-----------------------------------------------
+PREDICATES
+  a  b  c  p
+CLAUSES
+  a.  b.  c.
+
+  p:-a,b,write("a & b"),nl,fail.
+  p:-c,write("c"),nl.
+
+/*   Goal: p     a & b     ~a & c      Yes   */
+-----------------------------------------------
+PREDICATES
+  a  b  c  p1
+CLAUSES
+  a.  b.  c.
+
+  p1:-a,!,b,write("a & b"),nl,fail.
+  p1:-c,write("~a & c"),nl.
+
+/*   Goal: p1     a & b     No               */
+-----------------------------------------------
+PREDICATES
+  a  b  c  d  p2
+CLAUSES
+  b.  c.  d.
+  a:-not(d).
+
+  p2:-a,!,b,write("a & b"),nl,fail.
+  p2:-c,write("~a & c"),nl.
+
+/*   Goal: p2     ~a & c     Yes             */
+-----------------------------------------------
+PREDICATES
+  a  b  c  p3
+CLAUSES
+  a.  b.  c.
+
+  p3:-c,write("~a & c"),nl,fail.
+  p3:-a,!,b,write("a & b"),nl.
+
+/*   Goal: p3     ~a & c     a & b     Yes   */
+-----------------------------------------------
+    b) Трудности с отсечением и отрицанием (exmpl609.pro)
+
+PREDICATES
+  Ntpg(symbol)
+  Ntgp(symbol)
+  p(symbol)
+  g(symbol)
+  r(symbol)
+CLAUSES
+  Ntpg(X):-p(X),g(X).
+  Ntgp(X):-g(X),p(X).
+  r(a).
+  g(b).
+  p(X):-NOT(r(X)).
+
+/*
+Goal: Ntgp(X)
+X=b
+1 Solution
+
+Goal: Ntpg(X)
+p(X):-NOT(r(X)).
+704  PROLOG.ERR missing
+Переменная  X неконкретизирована   */
+
+6.4. Встроенные предикаты ввода вывода турбо-пролога.
+   Отработайте следующие программы:
+    a) ввод и вывод целого числа (exmpl610.pro)
+
+PREDICATES
+  cub
+  process(integer)
+
+CLAUSES
+
+  cub:-
+    write("Введите целое число"),nl,
+                          /* печать текста и перевод каретки */
+    write("(окончание - отрицательное число): "),
+    readint(X),           /* чтение целого числа */
+    process(X).
+
+  process(X):-X<0,!.
+  process(N):-
+    C = N*N*N,
+    write("Куб "),write(N),
+    write(" равен "),write(C),nl,
+    cub.
+
+    b) вывод списка (exmpl611.pro)
+
+DOMAINS
+  ilist = integer*
+
+PREDICATES
+  writelist(ilist)
+
+CLAUSES
+  writelist([]).
+  writelist([X|R]):-
+    write(X),nl,writelist(R).
+
+/* Goal: writelist([1,2,3])  Goal: writelist([])  */
+
+    c) вывод списка списков (exmpl612.pro)
+
+DOMAINS
+  ilist = symbol*
+  illist = ilist*
+
+PREDICATES
+  string(ilist)
+  writelist(illist)
+
+CLAUSES
+  string([]).
+  string([X|L]):-
+    write(X),write(' '),string(L).
+
+  writelist([]).
+  writelist([L|LL]):-
+    string(L),nl,writelist(LL).
+
+/*  Goal: writelist([[a,b,c],[d,e],[f,g,h,i]]) */
+
+    d) печать списка в виде диаграммы (exmpl613.pro)
+
+DOMAINS
+  ilist = integer*
+
+PREDICATES
+  diagramma(ilist)
+  stars(integer)
+
+CLAUSES
+  diagramma([]).
+  diagramma([N|L]):-
+    stars(N),nl,
+    diagramma(L).
+
+  stars(N):-
+    N>0,
+    write('*'),
+    N1=N-1,
+    stars(N1).
+    stars(N):-
+      N<=80.
+
+/*  Goal: diagramma([3,4,6,5,15])  */
+
+    e) печать по условию (exmpl614.pro)
+
+PREDICATES
+  f(integer,string)
+  test1(integer)
+  test2(integer)
+CLAUSES
+  f(1,"дед").
+  f(2,"бабка").
+  f(3,"внучка").
+  f(4,"жучка").
+  f(5,"кошка").
+  f(6,"мышка").
+  test1(B):-
+    f(B,S),write(S),nl.
+  test2(V):-
+    f(B,S),write(S),nl,B=V.
+
+/*
+Goal: test1(B)  Goal: test1(_)  Goal: test1(5)
+Goal: test2(V)  Goal: test2(_)  Goal: test2(5)  Goal: test2(7)
+*/
+================================================================

@@ -24,7 +24,8 @@ Clauses
 	associate(adventures,fantasy).
 	associate(adventures,history).
 	associate(fantasy,history).
-	associate(fantasy,adventures).
+	associate(fantasy,adventures)
 	intrest(X):-book(X),associate(X,_).
 	intrest(Y):-book(Y),associate(_,Y).
 	intrest(Z):-book(magazine);book(journal).
+	book(its_book):-book(_).
