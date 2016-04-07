@@ -1,0 +1,22 @@
+Domains
+	cstate=state(symbol,symbol,symbol,symbol)
+	asymbol=action3(symbol,symbol,symbol);action1(symbol)
+Predicates
+	motion(cstate,asymbol,cstate)
+	can_take(cstate)
+Clauses
+	motion(state(middle,on_box,middle,no_has),
+		action1(grip),
+		state(middle,on_box,middle,has)).
+	motion(state(P,on_floor,P,H),
+		action1(climb),
+		state(P,on_box,P,H)).
+	motion(state(P1,on_floor,P1,H),
+		action3(move,P1,P2),
+		state(P2,on_floor,P2,H)).
+	motion(state(P1,on_floor,B,H),
+		action3(cross,P1,P2),
+		state(P2,on_floor,B,H)).
+	can_take(state(_,_,_,has)).
+	can_take(State1):-motion(State1,Motion,State2),can_take(State2).
+
