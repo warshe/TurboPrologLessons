@@ -1,0 +1,9 @@
+Domains
+	list=symbol*
+Predicates
+	reverse_list(list,list)
+	reverse(list,list,list)
+Clauses
+	reverse_list(X,Y):-reverse(X,[],Y).
+	reverse([],Y,Y).
+	reverse([X|Xs],B,Y):-reverse(Xs,[X|B],Y).
