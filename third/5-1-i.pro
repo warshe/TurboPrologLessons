@@ -1,1 +1,13 @@
-5-1-i
+Domains
+	ilist=integer*
+Predicates
+	supsumma(ilist,integer,ilist)
+	belong(ilist,ilist)
+	sumlist(ilist,integer)
+Clauses
+	supsumma(Set,Summa,Supset):-belong(Supset,Set),sumlist(Supset,Summa).
+	belong([],Set).
+	belong([X|Xs],[X|Sets]):-belong(Xs,Sets).
+	belong([X|Xs],[Y|Sets]):-belong([X|Xs],Sets).
+	sumlist([X|[]],X).
+	sumlist([X|Xs],Z):-sumlist(Xs,Y),Z=X+Y.
