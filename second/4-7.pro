@@ -1,8 +1,11 @@
 Domains
 slist=symbol*
 Predicates
+concaten(slist,slist,slist)
 last(slist,symbol)
 Clauses
-last([X|[]],X).
-last([_|Z],X):-
-last(Z,X).
+last(L,X):-
+concaten(_,[X],L).
+concaten([],Y,Y).
+concaten([Xh|X],Y,[Xh|Z]):-
+concaten(X,Y,Z).
