@@ -1,1 +1,7 @@
-5-1-d
+Domains
+	ilist=integer*
+Predicates
+	orderlist(ilist)
+Clauses
+	orderlist([X|[]]).
+	orderlist([X,Y|XYs]):-X<=Y,orderlist(XYs).
