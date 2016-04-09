@@ -136,9 +136,7 @@ CLAUSES
   between(N,M,[N|Ts]):-
     N<M,K=N+1,between(K,M,Ts).
   between(N,M,_):-
-    N>M,fail.
-	
-	Goal: between(1,5,X)
+    N>M,fail.Goal: between(1,5,X)
 
     h) предикат принадлежности подмножества множеству
 (exmpl508.pro)
