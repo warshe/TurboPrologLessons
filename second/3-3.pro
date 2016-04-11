@@ -1,16 +1,16 @@
 Predicates
-big(symbol)
-small(symbol)
-brown(symbol)
-black(symbol)
-grey(symbol)
-dark(symbol)
+	big(symbol)
+	small(symbol)
+	brown(symbol)
+	black(symbol)
+	grey(symbol)
+	dark(symbol)
 Clauses
-big(bear).
-big(elephant).
-small(cat).
-brown(bear).
-black(cat).
-grey(elephant).
-dark(Z):-black(Z).
-dark(Z):-brown(Z).
+	big(bear).
+	big(elephant).
+	small(cat).
+	brown(bear).
+	black(cat).
+	grey(elephant).
+	dark(Z):-black(Z).
+	dark(Z):-brown(Z).
