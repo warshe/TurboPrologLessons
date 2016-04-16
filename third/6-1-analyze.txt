@@ -1,0 +1,113 @@
+ 6.1
+a)
+Goal: f1(1,Y),2<Y
+Call:  f1(1,_)
+       1<3
+Return:*f1(1,0)
+Redo:  f1(1,_)
+       3<=1
+Fail:  f1(1,_)
+Redo:  f1(1,_)
+       6<=1
+Fail   f1(1,_)
+Goal: f2(1,Y),2<Y
+Call:    f2(1,_)
+         1<3
+Return:  f2(1,0)
+Goal: f2(7,Y)
+         f2(7,0)
+         7<3
+Fail:    f2(7,0)
+Redo:    f2(7,0)
+         3<=7
+         7<6
+Fail:    f2(7,0)
+Redo:    f2(7,0)
+         6<=7
+Return:  f2(7,4)
+1 Solution
+Y=4
+Goal: f3(7,Y)
+Call: f3(7,_)
+      7<3
+Fail: f3(7,_)  
+Redo: f3(7,_)
+      7<6
+Fail: f3(7,_)
+Redo: f3(7,_)
+Return:f3(7,4)
+   1 Solution
+Y=4
+f4(1,Y)
+Call: f4(1,_)
+      1<3
+Return: *f4(1,0)
+Redo:   f4(1,_)
+        1<6
+Return: *f4(1,2)
+Redo:   f4(1,_)
+Return: f4(1,4)
+  3 Solutions
+Y=0 Y=2 Y=4
+b) Goal: maximum(2,5,Y)
+Call: maximum(2,5,_)
+      2>=5
+Fail: maximum(2,5,_)
+Redo: maximum(2,5,_)
+      2<5
+Return: maximum(2,5,5)
+1 Solution
+Y=5
+   Goal: maximum(5,5,Y)
+Call:    maximum(5,5,Y)
+         5>=5
+Return: *maximum(5,5,5)
+Redo: maximum(5,5,_)
+      5<5
+Fail: maximum(5,5,_)
+ 1 Solution
+Y=5
+    Goal: maximum(8,5,Y)
+call: maximum(8,5,_)
+      8>=5
+Return:*maximum(8,5,8)
+Redo:   maximum(8,5,Y)
+        8<5
+Fail: maximum(8,5,_)
+1 Solution
+Y=8 
+    Goal: maxcut(2,5,Y)
+Call: maxcut(2,5,_)
+      2>=5
+Fail: maxcut(2,5,_)
+Redo: maxcut(2,5,_)
+Return: maxcut(2,5,5)
+1 solution
+Y=5
+    Goal: maxcut(5,5,Y)
+Call: maxcut(5,5,_)
+      5>=5
+Return: maxcut(5,5,5)
+1 solution
+Y=5
+    Goal: maxcut(8,5,Y)
+Call: maxcut(8,5,_)
+      8>=5
+Return: maxcut(8,5,8)
+1 Solution
+Y=8
+c)
+d) Goal: add(a,[b,c],L)
+Call: add("a",["b","c"],_)
+Call: member("a",["b","c"])
+Redo: member("a",["b","c"])
+Call: member("a",["c"])
+Redo: member("a",["c"])
+Call: member("a",[])
+Redo: member("a",[])
+Fail: member("a",[])
+Redo: add("a",["b","c"],_)
+Return: add("a",["b","c"],["a","b","c"])
+1 Solution
+L=["a","b","c"]
+e)
